@@ -10,7 +10,7 @@ class Generator extends Model
     use HasFactory;
 
     protected $fillable = [
-        'department_name',
-
+        'generator_name',
+        'status_id',
     ];
 }

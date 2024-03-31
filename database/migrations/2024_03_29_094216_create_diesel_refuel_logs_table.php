@@ -16,9 +16,12 @@ return new class extends Migration
             $table->integer('diesel_level_before');
             $table->integer('diesel_quantity');
             $table->integer('diesel_level_after');
-            $table->text('refuel_receipt_image');
-            $table->unsignedBigInteger('topup_worker');
-            $table->foreign('topup_worker')->references('id')->on('workers');
+            $table->text('invoice_image_url');
+            $table->text('waybill_image_url');
+            $table->text('diesel_before_image_url');
+            $table->text('diesel_after_image_url');
+            $table->unsignedBigInteger('topup_worker_id');
+            $table->foreign('topup_worker_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

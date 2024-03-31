@@ -13,28 +13,40 @@ class BaseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function sendResponse($result, $message)
+    public function sendResponse($result, $message, $code = "00", $statusCode = 200)
     {
+
         $response = [
-            'success' => true,
+            'status' => $code,
             'message' => $message,
             'data'    => $result,
         ];
 
+        if ($result == []) unset($response['data']);
 
-        return response()->json($response, 200);
+        return response()->json($response, $statusCode);
     }
 
+
+    public function sendJsonResponse($response, $statusCode = 200)
+    {
+        return response()->json($response, $statusCode);
+    }
+
+    public function sendJsonErrorResponse($response, $statusCode = 400)
+    {
+        return response()->json($response, $statusCode);
+    }
 
     /**
      * return error response.
      *
      * @return \Illuminate\Http\Response
      */
-    public function sendError($error, $errorMessages = [], $code = 400)
+    public function sendError($error, $errorMessages = [], $code = "01", $statusCode = 400)
     {
         $response = [
-            'success' => false,
+            'status' => $code,
             'message' => $error,
         ];
 
@@ -44,6 +56,6 @@ class BaseController extends Controller
         }
 
 
-        return response()->json($response, $code);
+        return response()->json($response, $statusCode);
     }
 }

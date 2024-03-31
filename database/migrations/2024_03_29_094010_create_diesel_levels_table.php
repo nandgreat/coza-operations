@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('diesel_levels', function (Blueprint $table) {
             $table->id();
             $table->integer("diesel_level");
-            $table->unsignedBigInteger('updated_by');
-            $table->foreign('updated_by')->references('id')->on('workers');
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->foreign('updated_by')->references('id')->on('users');
             $table->timestamps();
         });
     }

@@ -1,14 +1,17 @@
 <?php
 
 use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\GeneratorController;
+use App\Http\Controllers\Api\GeneratorLogController;
 use App\Http\Controllers\Api\KeyController;
 use App\Http\Controllers\Api\KeyLogController;
 use App\Http\Controllers\Api\RegisterController;
+use App\Http\Controllers\Api\UsersController;
 use App\Http\Controllers\Api\WorkerController;
 use App\Http\Controllers\DepartmentController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\DieselController;
+use App\Models\DieselLevel;
 use Illuminate\Support\Facades\Route;
-use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,10 +36,34 @@ Route::controller(RegisterController::class)->group(function () {
 });
 
 Route::middleware('auth:sanctum')->controller(WorkerController::class)->prefix('/workers')->group(function () {
-    Route::post('', 'addWorker')->middleware('log.route');
+    Route::post('add', 'addWorker')->middleware('log.route');
     Route::get('', 'allWorkers');
-    Route::put('{workerId}', 'updateWorker')->middleware('log.route');;
+    Route::put('{workerId}', 'updateWorker')->middleware('log.route');
     Route::post('upload-image', 'upload');
+});
+
+Route::middleware('auth:sanctum')->controller(UsersController::class)->prefix('/users')->group(function () {
+    Route::post('add', 'addWorker')->middleware('log.route');
+    Route::get('', 'allUsers');
+    Route::put('{workerId}', 'updateWorker')->middleware('log.route');
+    Route::post('upload-image', 'upload');
+});
+
+Route::middleware('auth:sanctum')->controller(GeneratorLogController::class)->prefix('/generator-usage')->group(function () {
+    Route::post('turn-on', 'turnOnGenerator')->middleware('log.route');
+    Route::post('turn-off', 'turnOffGenerator')->middleware('log.route');
+});
+
+Route::middleware('auth:sanctum')->controller(DieselController::class)->prefix('/diesel')->group(function () {
+    Route::get('check', 'checkLevel')->middleware('log.route');
+    Route::post('refuel', 'refuel')->middleware('log.route');
+});
+
+Route::middleware('auth:sanctum')->controller(GeneratorController::class)->prefix('/generators')->group(function () {
+    Route::get('', 'generatorList')->middleware('log.route');
+    // Route::get('', 'allWorkers');
+    // Route::put('{workerId}', 'updateWorker')->middleware('log.route');;
+    // Route::post('upload-image', 'upload');
 });
 
 Route::middleware('auth:sanctum')->controller(DepartmentController::class)->prefix('/departments')->group(function () {
