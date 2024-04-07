@@ -22,6 +22,8 @@ return new class extends Migration
             $table->text('diesel_after_image_url');
             $table->unsignedBigInteger('topup_worker_id');
             $table->foreign('topup_worker_id')->references('id')->on('users');
+            $table->unsignedBigInteger('confirmation_worker_id');
+            $table->foreign('confirmation_worker_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

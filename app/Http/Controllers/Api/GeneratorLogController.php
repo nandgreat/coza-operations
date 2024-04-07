@@ -103,6 +103,25 @@ class GeneratorLogController extends BaseController
         }
     }
 
+    public function storeImage(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image_type' => 'required|string|in:gen_before,gen_after,invoice,waybill'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError($validator->errors()->all()[0], []);
+        }
+
+        $imageName = $request->image_type . "_" . time() . '.' . $request->image->extension();
+
+        $request->image->move(public_path($request->image_type . '_images'), $imageName);
+
+        return $this->sendResponse(['image_url' => asset($request->image_type . "_images/" . $imageName)], "You have successfully upload image.");
+    }
+
     public function turnOffGenerator(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -136,30 +155,28 @@ class GeneratorLogController extends BaseController
         $runningGeneratorsResult = Generator::where('status_id', 2)->get();
         try {
 
-            DB::beginTransaction();
+            // DB::beginTransaction();
 
             if (count($runningGeneratorsResult) == 1) {
-                if ($request->has('diesel_level')) {
-                    if ($request->diesel_level != null) {
+                if ($request->diesel_level != -1) {
 
-                        logInfo("Ending the Generator sessioon");
-                        $genSessionResult = GeneratorUsageSession::where('session_status', 1)->first();
+                    logInfo("Ending the Generator sessioon");
+                    $genSessionResult = GeneratorUsageSession::where('session_status', 1)->first();
 
-                        if (!$genSessionResult) {
-                            return $this->sendError('No Generator session running at the moment', []);
-                        }
-
-                        $dieselLevel = DieselLevel::find(1);
-                        $dieselLevel->diesel_level = $request->diesel_level;
-                        $dieselLevel->updated_by = $worker->id;
-                        $dieselLevel->save();
-
-                        $genSessionResult->diesel_level_after = $request->diesel_level;
-                        $genSessionResult->session_status = 2;
-                        $genSessionResult->time_stop = Carbon::now();
-                        $genSessionResult->turn_off_worker_id = $worker->id;
-                        $genSessionResult->save();
+                    if (!$genSessionResult) {
+                        return $this->sendError('No Generator session running at the moment', []);
                     }
+
+                    $dieselLevel = DieselLevel::find(1);
+                    $dieselLevel->diesel_level = $request->diesel_level;
+                    $dieselLevel->updated_by = $worker->id;
+                    $dieselLevel->save();
+
+                    $genSessionResult->diesel_level_after = $request->diesel_level;
+                    $genSessionResult->session_status = 2;
+                    $genSessionResult->time_stop = Carbon::now();
+                    $genSessionResult->turn_off_worker_id = $worker->id;
+                    $genSessionResult->save();
                 } else {
                     return $this->sendError('Enter the diesel level use to turn off generator', []);
                 }
@@ -171,15 +188,17 @@ class GeneratorLogController extends BaseController
             $genUsageResult->turn_off_worker_id = $worker->id;
             $genUsageResult->save();
 
+            logInfo($genUsageResult, "Gen usages Log things");
+
             $genResult->status_id = 1;
             $genResult->save();
 
-            DB::commit();
+            // DB::commit();
 
             return $this->sendResponse($genResult, 'Generator Turned off successfully.');
         } catch (Exception $e) {
 
-            DB::rollBack();
+            // DB::rollBack();
             return $this->sendError('Internal Server Error..', ['error' => $e->getMessage()]);
         }
     }
@@ -190,5 +209,4 @@ class GeneratorLogController extends BaseController
 
         return $this->sendResponse($keyInserted, 'Generators fetched successfully.');
     }
-
 }

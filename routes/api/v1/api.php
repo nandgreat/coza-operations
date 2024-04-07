@@ -61,10 +61,13 @@ Route::middleware('auth:sanctum')->controller(DieselController::class)->prefix('
 
 Route::middleware('auth:sanctum')->controller(GeneratorController::class)->prefix('/generators')->group(function () {
     Route::get('', 'generatorList')->middleware('log.route');
-    // Route::get('', 'allWorkers');
+    Route::get('purposes', 'generatorPurpose')->middleware('log.route');
     // Route::put('{workerId}', 'updateWorker')->middleware('log.route');;
     // Route::post('upload-image', 'upload');
 });
+
+Route::get('approval-admins', [GeneratorController::class,  'approvalAdmins']);
+Route::post('upload-image', [GeneratorLogController::class,  'storeImage']);
 
 Route::middleware('auth:sanctum')->controller(DepartmentController::class)->prefix('/departments')->group(function () {
     Route::post('', 'addDepartment');

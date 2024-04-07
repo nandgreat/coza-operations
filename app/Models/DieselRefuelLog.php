@@ -16,6 +16,7 @@ class DieselRefuelLog extends Model
         'invoice_image_url',
         'waybill_image_url',
         'diesel_before_image_url',
+        'confirmation_worker_id',
         'diesel_after_image_url',
         'topup_worker_id'
     ];

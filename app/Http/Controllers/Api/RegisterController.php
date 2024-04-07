@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Api\BaseController as BaseController;
+use App\Models\DieselLevel;
 use App\Models\Key;
 use App\Models\KeyLog;
 use App\Models\User;
@@ -24,13 +25,9 @@ class RegisterController extends BaseController
             $success['auth']['access_token'] =  $user->createToken('MyApp')->plainTextToken;
             $success['user'] =  $user;
 
-            $workersCount = Worker::all()->count();
-            $keysCount = Key::all()->count();
-            $keyLogsCount = KeyLog::all()->count();
+            $dieselLevel = DieselLevel::find(1);
 
-            $success['dashboard_count']['workers_count'] = $workersCount;
-            $success['dashboard_count']['keys_count'] = $keysCount;
-            $success['dashboard_count']['key_logs_count'] = $keyLogsCount;
+            $success['diesel_details']['diesel_level'] = $dieselLevel->diesel_level;
 
             return $this->sendResponse($success, 'User login successfully.');
         } else {

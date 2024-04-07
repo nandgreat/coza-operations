@@ -22,6 +22,7 @@ class DieselController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'worker_code' => 'required|numeric',
+            'confirmation_worker_code' => 'required|numeric',
             'quantity' => 'required|numeric',
             'invoice_image_url' => 'required|string',
             'waybill_image_url' => 'required|string',
@@ -39,7 +40,14 @@ class DieselController extends BaseController
             return  $this->sendJsonErrorResponse($userResult);
         }
 
+        $confirmUserResult = validateConfirmationWorkerCode($request->confirmation_worker_code);
+
+        if ($confirmUserResult['status'] != '00') {
+            return  $this->sendJsonErrorResponse($confirmUserResult);
+        }
+
         $worker = $userResult['data'];
+        $confirmationWorker = $confirmUserResult['data'];
 
         $dieselLevel = DieselLevel::find(1);
 
@@ -51,12 +59,13 @@ class DieselController extends BaseController
             'waybill_image_url' => $request->waybill_image_url,
             'diesel_before_image_url' => $request->diesel_before_image_url,
             'diesel_after_image_url' => $request->diesel_after_image_url,
-            'topup_worker_id' => $worker->id
+            'topup_worker_id' => $worker->id,
+            'confirmation_worker_id' => $confirmationWorker->id
         ]);
 
         $dieselLevel->diesel_level = $dieselRefuel->diesel_level_after;
         $dieselLevel->save();
 
-        return $this->sendResponse($dieselLevel, 'Diesel Refueled successfully.');
+        return $this->sendResponse(['diesel_details' => $dieselLevel], 'Diesel Refueled successfully.');
     }
 }
