@@ -168,6 +168,11 @@ class GeneratorLogController extends BaseController
                     }
 
                     $dieselLevel = DieselLevel::find(1);
+
+                    if($dieselLevel->diesel_level > $request->diesel_level){
+                        return $this->sendError('Diesel level cannot be more thank the previous level', []);
+                    }
+                    
                     $dieselLevel->diesel_level = $request->diesel_level;
                     $dieselLevel->updated_by = $worker->id;
                     $dieselLevel->save();
