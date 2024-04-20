@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Church;
+use App\Models\Service;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -16,6 +19,10 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             DepartmentSeeder::class,
+            CitySeeder::class,
+            ServiceSeeder::class,
+            AttendanceStatusSeeder::class,
+            ChurchSeeder::class,
             StatusSeeder::class,
             DieselLevelSeeder::class,
             KeySeeder::class,
