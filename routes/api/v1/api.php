@@ -8,8 +8,10 @@ use App\Http\Controllers\Api\KeyLogController;
 use App\Http\Controllers\Api\RegisterController;
 use App\Http\Controllers\Api\UsersController;
 use App\Http\Controllers\Api\WorkerController;
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DieselController;
+use App\Http\Controllers\MemberController;
 use App\Models\DieselLevel;
 use Illuminate\Support\Facades\Route;
 
@@ -91,4 +93,15 @@ Route::middleware('auth:sanctum')->controller(KeyLogController::class)->prefix('
 
 Route::middleware('auth:sanctum')->controller(DashboardController::class)->prefix('dashboard')->group(function () {
     Route::get('items', 'index');
+});
+
+Route::middleware('auth:sanctum')->controller(MemberController::class)->prefix('members')->group(function () {
+    Route::get('', 'memberList');
+    Route::post('', 'addMember');
+});
+
+Route::middleware('auth:sanctum')->controller(AttendanceController::class)->prefix('attendance')->group(function () {
+    Route::get('all', 'getAllAttendance');
+    Route::post('sign-in', 'signinAttendance');
+    Route::post('sign-out', 'signoutAttendance');
 });

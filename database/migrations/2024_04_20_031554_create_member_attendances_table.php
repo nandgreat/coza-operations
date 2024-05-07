@@ -17,10 +17,10 @@ return new class extends Migration
             $table->foreign('member_id')->references('id')->on('members');
             $table->unsignedBigInteger('service_id')->nullable();
             $table->foreign('service_id')->references('id')->on('services');
-            $table->unsignedBigInteger('attendance_status_id')->nullable();
-            $table->foreign('attendance_status_id')->references('id')->on('attendance_statuses');
             $table->dateTime('time_in');
             $table->dateTime('time_out')->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->foreign('created_by')->references('id')->on('users');
             $table->timestamps();
         });
     }

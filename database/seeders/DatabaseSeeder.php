@@ -20,8 +20,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             DepartmentSeeder::class,
             CitySeeder::class,
+            ServiceStatusSeeder::class,
+            ServiceTypeSeeder::class,
             ServiceSeeder::class,
-            AttendanceStatusSeeder::class,
             ChurchSeeder::class,
             StatusSeeder::class,
             DieselLevelSeeder::class,

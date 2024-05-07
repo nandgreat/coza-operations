@@ -18,6 +18,7 @@ class DepartmentSeeder extends Seeder
             ['department_name' => 'Child Care', 'department_short_name' => "Child Card", 'no_of_keys' => 3, 'keys_taken' => 0, 'keys_available' => 3,  'created_at' => now(), 'updated_at' => now()],
             ['department_name' => 'COZA Corporate', 'department_short_name' => "COZA Corporate", 'no_of_keys' => 3, 'keys_taken' => 0, 'keys_available' => 3,  'created_at' => now(), 'updated_at' => now()],
             ['department_name' => 'Direct Secret Service', 'department_short_name' => "DSS", 'no_of_keys' => 3, 'keys_taken' => 0, 'keys_available' => 3,  'created_at' => now(), 'updated_at' => now()],
+            ['department_name' => 'Pastoral Care Unit', 'department_short_name' => "PCU", 'no_of_keys' => 0, 'keys_taken' => 0, 'keys_available' => 0,  'created_at' => now(), 'updated_at' => now()],
         ];
 
         DB::table('departments')->insert($default);

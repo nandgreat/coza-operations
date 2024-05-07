@@ -16,6 +16,8 @@ class StatusSeeder extends Seeder
         $default = [
             ['status' => 'Idle', 'created_at' => now(), 'updated_at' => now()],
             ['status' => 'In-Use', 'created_at' => now(), 'updated_at' => now()],
+            ['status' => 'Running', 'created_at' => now(), 'updated_at' => now()],
+            ['status' => 'Ended', 'created_at' => now(), 'updated_at' => now()],
         ];
 
         DB::table('statuses')->insert($default);
